@@ -97,12 +97,28 @@ namespace ORB_SLAM2 {
             imDepth.convertTo(imDepthScaled, CV_32F, depthMapFactor);
         }
 
-        thread threadPoints(&ORB_SLAM2::Frame::ExtractORB, this, imGray);
-        thread threadLines(&ORB_SLAM2::Frame::ExtractLSD, this, imGray);
-        thread threadPlanes(&ORB_SLAM2::Frame::ExtractPlanes, this, imRGB, imDepth, K, depthMapFactor);
-        threadPoints.join();
-        threadLines.join();
-        threadPlanes.join();
+
+        cout << imGray << endl;
+        Mat im(480, 640, CV_8UC3, Scalar(255, 255, 255));
+        cv::imshow("im", im);
+        cv::waitKey(1000 * 1);
+
+        this->ExtractORB(imGray);
+        for (int i = 0; i <= mvKeys.size() - 1; i++) {
+            cv::circle(im, mvKeys[i].pt, 1, Scalar(0, 0, 255), 1);
+        }
+        cv::imshow("im", im);
+        cv::waitKey(1000 * 1);
+
+        this->ExtractLSD(imGray);
+        for (int i = 0; i <= mvKeylinesUn.size() - 1; i++) {
+            cv::line(im, mvKeylinesUn[i].getStartPoint(), mvKeylinesUn[i].getEndPoint(), Scalar(0, 255, 0), 2);
+        }
+        cv::imshow("im", im);
+        cv::waitKey(1000 * 1);
+
+        this->ExtractPlanes(imRGB, imDepth, K, depthMapFactor);
+
 
         N = mvKeys.size();
         NL = mvKeylinesUn.size();
@@ -169,7 +185,7 @@ namespace ORB_SLAM2 {
 
     void Frame::ExtractLSD(const cv::Mat &im) {
         mpLineSegment->ExtractLineSegment(im, mvKeylinesUn, mLdesc, mvKeyLineFunctions);
-
+        cout << "" << endl;
     }
 
     void Frame::ExtractORB(const cv::Mat &im) {
@@ -567,7 +583,7 @@ namespace ORB_SLAM2 {
         }
 
         if (pts3d.size() < 10.0)
-            return static_cast<Vector6d>(NULL);
+            return Vector6d{};
 
         RandomLine3d tmpLine;
         vector<RandomPoint3d> rndpts3d;
@@ -598,12 +614,13 @@ namespace ORB_SLAM2 {
                     B.at<float>(0, 0), B.at<float>(1, 0), B.at<float>(2, 0);
             return line3D;
         } else {
-            return static_cast<Vector6d>(NULL);
+            return Vector6d{};
         }
     }
 
     void
     Frame::ExtractPlanes(const cv::Mat &imRGB, const cv::Mat &imDepth, const cv::Mat &K, const float &depthMapFactor) {
+
         planeDetector.readColorImage(imRGB);
         planeDetector.readDepthImage(imDepth, K, depthMapFactor);
         planeDetector.runPlaneDetection();
@@ -649,6 +666,7 @@ namespace ORB_SLAM2 {
             }
 
             mvPlanePoints.push_back(*coarseCloud);
+            cout << "平面参数:" << coef << endl;
             mvPlaneCoefficients.push_back(coef);
         }
     }

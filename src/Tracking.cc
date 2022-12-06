@@ -578,7 +578,7 @@ namespace ORB_SLAM2 {
 
                 if (z.first > 0 && z.second > 0) {
                     Vector6d line3D = mCurrentFrame.Obtain3DLine(i, mImDepth);
-                    if (line3D == static_cast<Vector6d>(NULL)) {
+                    if (line3D == Vector6d{}) {
                         continue;
                     }
                     MapLine *pNewML = new MapLine(line3D, pKFini, mpMap);
@@ -1597,7 +1597,7 @@ namespace ORB_SLAM2 {
 
                 if (bCreateNew) {
                     Vector6d line3D = mCurrentFrame.Obtain3DLine(i, mImDepth);
-                    if (line3D == static_cast<Vector6d>(NULL)) {
+                    if (line3D == Vector6d{}) {
                         continue;
                     }
                     MapLine *pNewML = new MapLine(line3D, pKF, mpMap);

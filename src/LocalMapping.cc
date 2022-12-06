@@ -37,6 +37,45 @@ namespace ORB_SLAM2 {
         mfMFVerTh = fSettings["Plane.MFVerticalThreshold"];
     }
 
+    void LocalMapping::Run_once(){
+         // Check if there are keyframes in the queue
+        if (CheckNewKeyFrames()) {
+            // BoW conversion and insertion in Map
+            // VI-A keyframe insertion
+            ProcessNewKeyFrame();
+
+            // Check recent MapPoints
+            // VI-B recent map points culling
+            thread threadCullPoint(&LocalMapping::MapPointCulling, this);
+            thread threadCullLine(&LocalMapping::MapLineCulling, this);
+            thread threadCullPlane(&LocalMapping::MapPlaneCulling, this);
+            threadCullPoint.join();
+            threadCullLine.join();
+            threadCullPlane.join();
+
+            // Triangulate new MapPoints
+            // VI-C new map points creation
+
+            thread threadCreatePoints(&LocalMapping::CreateNewMapPoints, this);
+            threadCreatePoints.join();
+
+            if (!CheckNewKeyFrames()) {
+                // Find more matches in neighbor keyframes and fuse point duplications
+                SearchInNeighbors();
+            }
+
+            if (!CheckNewKeyFrames() && !stopRequested()) {
+                // Check redundant local Keyframes
+                // VI-E local keyframes culling
+                KeyFrameCulling();
+            }
+
+        }
+
+        // Tracking will see that Local Mapping is busy
+        SetAcceptKeyFrames(true);
+    }
+
     void LocalMapping::Run() {
 
         mbFinished = false;

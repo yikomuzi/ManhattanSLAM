@@ -41,6 +41,7 @@ namespace ORB_SLAM2 {
 
         // Main function
         void Run();
+        void Run_once();
 
         void InsertKeyFrame(KeyFrame *pKF);
 

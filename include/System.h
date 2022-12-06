@@ -91,7 +91,7 @@ namespace ORB_SLAM2 {
         // SaveMap(const string &filename);
         // LoadMap(const string &filename);
 
-    private:
+    public:
 
         void saveSurfels(pcl::PointCloud<pcl::PointSurfel>::Ptr pointCloud);
 

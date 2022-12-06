@@ -92,11 +92,11 @@ namespace ORB_SLAM2 {
 
         //Initialize the Local Mapping thread and launch
         mpLocalMapper = new LocalMapping(mpMap, strSettingsFile);
-        mptLocalMapping = new thread(&ORB_SLAM2::LocalMapping::Run, mpLocalMapper);
+//        mptLocalMapping = new thread(&ORB_SLAM2::LocalMapping::Run, mpLocalMapper);
 
         //Initialize the Surfel Mapping thread and launch
         mpSurfelMapper = new SurfelMapping(mpMap, strSettingsFile);
-        mptSurfelMapping = new thread(&ORB_SLAM2::SurfelMapping::Run, mpSurfelMapper);
+//        mptSurfelMapping = new thread(&ORB_SLAM2::SurfelMapping::Run, mpSurfelMapper);
 
         //Initialize the Viewer thread and launch
         mpViewer = new Viewer(this, mpFrameDrawer, mpMapDrawer, strSettingsFile);
