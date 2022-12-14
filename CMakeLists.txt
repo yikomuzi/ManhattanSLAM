@@ -120,3 +120,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Example)
 add_executable(manhattan_slam Example/manhattan_slam.cc)
 target_link_libraries(manhattan_slam ${PROJECT_NAME})
 
+add_executable(manhattan_slam_igibson Example/manhattan_slam_igibson.cc)
+target_link_libraries(manhattan_slam_igibson ${PROJECT_NAME})
+

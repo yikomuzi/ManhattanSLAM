@@ -72,7 +72,7 @@ namespace ORB_SLAM2 {
 
         void SetLocalMapper(LocalMapping *pLocalMapper);
 
-        void SetSurfelMapper(SurfelMapping *pSurfelMapper);
+//        void SetSurfelMapper(SurfelMapping *pSurfelMapper);
 
         void SetViewer(Viewer *pViewer);
 
@@ -115,6 +115,7 @@ namespace ORB_SLAM2 {
 
         // Main tracking function.
         void Track();
+        void Track_object();
 
         // Map initialization for stereo and RGB-D
         void StereoInitialization();
@@ -133,7 +134,7 @@ namespace ORB_SLAM2 {
 
         bool TranslationWithMotionModel();
 
-        bool Relocalization();
+//        bool Relocalization();
 
         void UpdateLocalMap();
 
@@ -164,7 +165,7 @@ namespace ORB_SLAM2 {
 
         // Other Thread Pointers
         LocalMapping *mpLocalMapper;
-        SurfelMapping *mpSurfelMapper;
+//        SurfelMapping *mpSurfelMapper;
 
         // ORB
         ORBextractor *mpORBextractor;

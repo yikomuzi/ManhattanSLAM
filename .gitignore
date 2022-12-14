@@ -1,7 +1,8 @@
 build
 Example/manhattan_slam
-Example/CameraTrajectory.txt
-Example/KeyFrameTrajectory.txt
+Example/manhattan_slam_igibson
+CameraTrajectory*.txt
+KeyFrameTrajectory*.txt
 Example/Surfels.ply
 lib
 Thirdparty/DBoW2/build/

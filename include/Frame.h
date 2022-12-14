@@ -233,7 +233,7 @@ namespace ORB_SLAM2 {
         static bool mbInitialComputations;
 
         std::vector<PointCloud> mvPlanePoints;
-        std::vector<cv::Mat> mvPlaneCoefficients;
+        std::vector<cv::Mat> mvPlaneCoefficients;  // 平面参数  平面法向量nx,ny,nz和平面到原点的距离
         std::vector<MapPlane *> mvpMapPlanes;
         std::vector<MapPlane *> mvpParallelPlanes;
         std::vector<MapPlane *> mvpVerticalPlanes;

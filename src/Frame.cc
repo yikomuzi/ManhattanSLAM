@@ -98,26 +98,55 @@ namespace ORB_SLAM2 {
         }
 
 
-        cout << imGray << endl;
+//        cout << imGray << endl;
         Mat im(480, 640, CV_8UC3, Scalar(255, 255, 255));
         cv::imshow("im", im);
-        cv::waitKey(1000 * 1);
+//        cv::waitKey(1000 * 1);
 
+        // 提取点特征
         this->ExtractORB(imGray);
         for (int i = 0; i <= mvKeys.size() - 1; i++) {
             cv::circle(im, mvKeys[i].pt, 1, Scalar(0, 0, 255), 1);
         }
         cv::imshow("im", im);
-        cv::waitKey(1000 * 1);
+//        cv::waitKey(1000 * 1);
 
+        // 提取线特征
         this->ExtractLSD(imGray);
         for (int i = 0; i <= mvKeylinesUn.size() - 1; i++) {
             cv::line(im, mvKeylinesUn[i].getStartPoint(), mvKeylinesUn[i].getEndPoint(), Scalar(0, 255, 0), 2);
         }
         cv::imshow("im", im);
-        cv::waitKey(1000 * 1);
+//        cv::waitKey(1000 * 1);
 
+        // 提取面特征
         this->ExtractPlanes(imRGB, imDepth, K, depthMapFactor);
+        vector<vector<float>> p;
+        for (auto plane: mvPlanePoints) {
+            auto points = plane.points;
+            for (auto point: points) {
+                float x = point.x;
+                float y = point.y;
+                float z = point.z;
+
+                float fx = 240;
+                float fy = 240;
+                float cx = 320;
+                float cy = 240;
+                float px = (fx * x + cx * z) / z;
+                float py = (fy * y + cy * z) / z;
+                vector<float> pxy{px, py};
+                p.push_back(pxy);
+            }
+        }
+        for (auto i: p) {
+            cv::circle(im, cv::Point{int(i[0]), int(i[1])}, 1, Scalar(255, 0, 0), 2);
+        }
+        cv::imshow("im", im);
+//        cv::waitKey();
+
+//        mvPlanePoints
+//        mvPlaneCoefficients.push_back(coef);
 
 
         N = mvKeys.size();
@@ -594,7 +623,7 @@ namespace ORB_SLAM2 {
                 0, 0, 1);
 
         // compute uncertainty of 3d points
-        for (auto &j : pts3d) {
+        for (auto &j: pts3d) {
             rndpts3d.push_back(compPt3dCov(j, K, 1));
         }
         // using ransac to extract a 3d line from 3d pts
@@ -628,7 +657,7 @@ namespace ORB_SLAM2 {
         for (int i = 0; i < planeDetector.plane_num_; i++) {
             auto &indices = planeDetector.plane_vertices_[i];
             PointCloud::Ptr inputCloud(new PointCloud());
-            for (int j : indices) {
+            for (int j: indices) {
                 PointT p;
                 p.x = (float) planeDetector.cloud.vertices[j][0];
                 p.y = (float) planeDetector.cloud.vertices[j][1];
@@ -666,8 +695,9 @@ namespace ORB_SLAM2 {
             }
 
             mvPlanePoints.push_back(*coarseCloud);
-            cout << "平面参数:" << coef << endl;
             mvPlaneCoefficients.push_back(coef);
+            cout << "平面参数:" << *coarseCloud << endl;
+            cout << "平面参数:" << coef << endl;
         }
     }
 
@@ -683,7 +713,7 @@ namespace ORB_SLAM2 {
         int i = 0;
         auto &points = pointCloud->points;
 
-        for (auto &p : points) {
+        for (auto &p: points) {
             double absDis = abs(plane.at<float>(0) * p.x +
                                 plane.at<float>(1) * p.y +
                                 plane.at<float>(2) * p.z +

@@ -41,18 +41,18 @@ namespace ORB_SLAM2 {
                                             mbActivateLocalizationMode(false),
                                             mbDeactivateLocalizationMode(false) {
         // Output welcome message
-        cout << endl <<
-             "ManhattanSLAM Copyright (C) 2021 Raza Yunus, Technical University of Munich (TUM)." << endl <<
-             "This program comes with ABSOLUTELY NO WARRANTY;" << endl <<
-             "This is free software, and you are welcome to redistribute it" << endl <<
-             "under certain conditions. See LICENSE.txt." << endl << endl;
-
-        //Check settings file
-        cv::FileStorage fsSettings(strSettingsFile.c_str(), cv::FileStorage::READ);
-        if (!fsSettings.isOpened()) {
-            cerr << "Failed to open settings file at: " << strSettingsFile << endl;
-            exit(-1);
-        }
+//        cout << endl <<
+//             "ManhattanSLAM Copyright (C) 2021 Raza Yunus, Technical University of Munich (TUM)." << endl <<
+//             "This program comes with ABSOLUTELY NO WARRANTY;" << endl <<
+//             "This is free software, and you are welcome to redistribute it" << endl <<
+//             "under certain conditions. See LICENSE.txt." << endl << endl;
+//
+//        //Check settings file
+//        cv::FileStorage fsSettings(strSettingsFile.c_str(), cv::FileStorage::READ);
+//        if (!fsSettings.isOpened()) {
+//            cerr << "Failed to open settings file at: " << strSettingsFile << endl;
+//            exit(-1);
+//        }
 
         // TO DO
         //float resolution = fsSettings["PointCloudMapping.Resolution"];
@@ -60,16 +60,16 @@ namespace ORB_SLAM2 {
 
         //Load ORB Vocabulary
         cout << endl << "Loading ORB Vocabulary. This could take a while..." << endl;
-        clock_t tStart = clock();
+//        clock_t tStart = clock();
         mpVocabulary = new ORBVocabulary();
         bool bVocLoad = mpVocabulary->loadFromTextFile(strVocFile);
         //else
         //   bVocLoad = mpVocabulary->loadFromBinaryFile(strVocFile);
-        if (!bVocLoad) {
-            cerr << "Wrong path to vocabulary. " << endl;
-            cerr << "Failed to open at: " << strVocFile << endl;
-            exit(-1);
-        }
+//        if (!bVocLoad) {
+//            cerr << "Wrong path to vocabulary. " << endl;
+//            cerr << "Failed to open at: " << strVocFile << endl;
+//            exit(-1);
+//        }
         //printf("Vocabulary loaded in %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
         cout << "Vocabulary loaded!" << endl << endl;
         //Create KeyFrame Database
@@ -95,7 +95,7 @@ namespace ORB_SLAM2 {
 //        mptLocalMapping = new thread(&ORB_SLAM2::LocalMapping::Run, mpLocalMapper);
 
         //Initialize the Surfel Mapping thread and launch
-        mpSurfelMapper = new SurfelMapping(mpMap, strSettingsFile);
+//        mpSurfelMapper = new SurfelMapping(mpMap, strSettingsFile);
 //        mptSurfelMapping = new thread(&ORB_SLAM2::SurfelMapping::Run, mpSurfelMapper);
 
         //Initialize the Viewer thread and launch
@@ -108,7 +108,7 @@ namespace ORB_SLAM2 {
 
         //Set pointers between threads
         mpTracker->SetLocalMapper(mpLocalMapper);
-        mpTracker->SetSurfelMapper(mpSurfelMapper);
+//        mpTracker->SetSurfelMapper(mpSurfelMapper);
     }
 
 
@@ -164,26 +164,26 @@ namespace ORB_SLAM2 {
         mbReset = true;
     }
 
-    void System::Shutdown() {
-        mpLocalMapper->RequestFinish();
-
-        pcl::PointCloud<pcl::PointSurfel>::Ptr pointCloud = mpSurfelMapper->Stop();
-        saveSurfels(pointCloud);
-
-        if (mpViewer) {
-            mpViewer->RequestFinish();
-            while (!mpViewer->isFinished())
-                usleep(5000);
-
-        }
-
-        // Wait until all thread have effectively stopped
-        while (!mpLocalMapper->isFinished()) {
-            usleep(5000);
-        }
-        if (mpViewer)
-            pangolin::BindToContext("ORB-SLAM2: Map Viewer");
-    }
+//    void System::Shutdown() {
+//        mpLocalMapper->RequestFinish();
+//
+//        pcl::PointCloud<pcl::PointSurfel>::Ptr pointCloud = mpSurfelMapper->Stop();
+//        saveSurfels(pointCloud);
+//
+//        if (mpViewer) {
+//            mpViewer->RequestFinish();
+//            while (!mpViewer->isFinished())
+//                usleep(5000);
+//
+//        }
+//
+//        // Wait until all thread have effectively stopped
+//        while (!mpLocalMapper->isFinished()) {
+//            usleep(5000);
+//        }
+//        if (mpViewer)
+//            pangolin::BindToContext("ORB-SLAM2: Map Viewer");
+//    }
 
     void System::SaveTrajectoryTUM(const string &filename) {
         cout << endl << "Saving camera trajectory to " << filename << " ..." << endl;
@@ -193,7 +193,7 @@ namespace ORB_SLAM2 {
 
         // Transform all keyframes so that the first keyframe is at the origin.
         // After a loop closure the first keyframe might not be at the origin.
-        cv::Mat Two = vpKFs[0]->GetPoseInverse();
+//        cv::Mat Two = vpKFs[0]->GetPoseInverse();
 
         ofstream f;
         f.open(filename.c_str());
@@ -223,7 +223,7 @@ namespace ORB_SLAM2 {
                 pKF = pKF->GetParent();
             }
 
-            Trw = Trw * pKF->GetPose() * Two;
+            Trw = Trw * pKF->GetPose();
 
             cv::Mat Tcw = (*lit) * Trw;
             cv::Mat Rwc = Tcw.rowRange(0, 3).colRange(0, 3).t();
@@ -306,7 +306,7 @@ namespace ORB_SLAM2 {
         std::vector<uchar3> colours;
         std::vector<float2> props;
 
-        for (auto &point : points) {
+        for (auto &point: points) {
             if (std::isnan(point.x))
                 continue;
             vertices.push_back({point.x, point.y, point.z});

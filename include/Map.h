@@ -127,8 +127,8 @@ namespace ORB_SLAM2 {
 
         KeyFrame *GetPartialManhattanObservation(MapPlane *pMP1, MapPlane *pMP2);
 
-        std::vector<Surfel> mvLocalSurfels;
-        std::vector<Surfel> mvInactiveSurfels;
+//        std::vector<Surfel> mvLocalSurfels;
+//        std::vector<Surfel> mvInactiveSurfels;
 
     protected:
         std::set<MapPoint *> mspMapPoints;

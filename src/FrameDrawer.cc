@@ -158,6 +158,7 @@ namespace ORB_SLAM2 {
     void FrameDrawer::Update(Tracking *pTracker) {
         unique_lock<mutex> lock(mMutex);
         pTracker->mImGray.copyTo(mIm);
+
         mvCurrentKeys = pTracker->mCurrentFrame.mvKeys;
         N = mvCurrentKeys.size();
         mvbVO = vector<bool>(N, false);

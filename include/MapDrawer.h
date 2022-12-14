@@ -52,6 +52,10 @@ namespace ORB_SLAM2 {
 
         void GetCurrentOpenGLCameraMatrix(pangolin::OpenGlMatrix &M);
 
+        void DrawTruth_poses();
+
+        Eigen::MatrixXd truth_poses; // n*3 xyz pose
+
     private:
         float mLineWidth;
         float mKeyFrameSize;

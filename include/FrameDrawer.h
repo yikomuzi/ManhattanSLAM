@@ -52,16 +52,16 @@ namespace ORB_SLAM2 {
         void DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText);
 
         // Info of the frame to be drawn
-        cv::Mat mIm;
-        int N;
-        std::vector<cv::KeyPoint> mvCurrentKeys;
-        std::vector<bool> mvbMap, mvbVO;
+        cv::Mat mIm;  // 灰度图像
+        int N;  // 图片中特征点的数量
+        std::vector<cv::KeyPoint> mvCurrentKeys;  // 图片中的特征点
+        std::vector<bool> mvbMap, mvbVO;  // mvbMap：特征点是否是地图点
         bool mbOnlyTracking;
         int mnTracked, mnTrackedVO;
         int mState;
 
-        int NL;
-        std::vector<cv::line_descriptor::KeyLine> mvCurrentKeyLines;
+        int NL;  // 当前帧线的数量
+        std::vector<cv::line_descriptor::KeyLine> mvCurrentKeyLines;  // 当前帧的线
         std::vector<bool> mvbLineMap, mvbLineVO;
 
         Map *mpMap;

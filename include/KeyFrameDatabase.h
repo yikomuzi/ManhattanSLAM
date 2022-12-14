@@ -51,7 +51,7 @@ namespace ORB_SLAM2 {
         void clear();
 
         // Relocalization
-        std::vector<KeyFrame *> DetectRelocalizationCandidates(Frame *F);
+//        std::vector<KeyFrame *> DetectRelocalizationCandidates(Frame *F);
 
     protected:
 

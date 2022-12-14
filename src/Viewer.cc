@@ -75,8 +75,8 @@ namespace ORB_SLAM2 {
         pangolin::Var<bool> menuReset("menu.Reset", false, false);
 
         pangolin::OpenGlRenderState s_cam(
-                pangolin::ProjectionMatrix(1024, 768, mViewpointF, mViewpointF, 512, 389, 0.1, 1000),
-                pangolin::ModelViewLookAt(mViewpointX, mViewpointY, mViewpointZ, 0, 0, 0, 0.0, -1.0, 0.0)
+                pangolin::ProjectionMatrix(1024, 768, mViewpointF, mViewpointF, 512, 389, 0.00001, 1000000),
+                pangolin::ModelViewLookAt(mViewpointX, mViewpointY, mViewpointZ, 0, 0, 0, 0.0, 0.0, 1.0)
         );
 
         // Add named OpenGL viewport to window and provide 3D Handler
@@ -96,18 +96,18 @@ namespace ORB_SLAM2 {
         while (1) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            mpMapDrawer->GetCurrentOpenGLCameraMatrix(Twc);
+//            mpMapDrawer->GetCurrentOpenGLCameraMatrix(Twc);
 
-            if (menuFollowCamera && bFollow) {
-                s_cam.Follow(Twc);
-            } else if (menuFollowCamera && !bFollow) {
-                s_cam.SetModelViewMatrix(
-                        pangolin::ModelViewLookAt(mViewpointX, mViewpointY, mViewpointZ, 0, 0, 0, 0.0, -1.0, 0.0));
-                s_cam.Follow(Twc);
-                bFollow = true;
-            } else if (!menuFollowCamera && bFollow) {
-                bFollow = false;
-            }
+//            if (menuFollowCamera && bFollow) {
+//                s_cam.Follow(Twc);
+//            } else if (menuFollowCamera && !bFollow) {
+//                s_cam.SetModelViewMatrix(
+//                        pangolin::ModelViewLookAt(mViewpointX, mViewpointY, mViewpointZ, 0, 0, 0, 0.0, -1.0, 0.0));
+//                s_cam.Follow(Twc);
+//                bFollow = true;
+//            } else if (!menuFollowCamera && bFollow) {
+//                bFollow = false;
+//            }
 
             if (menuLocalizationMode && !bLocalizationMode) {
                 mpSystem->ActivateLocalizationMode();
@@ -123,16 +123,32 @@ namespace ORB_SLAM2 {
             if (menuShowKeyFrames || menuShowGraph)
                 mpMapDrawer->DrawKeyFrames(menuShowKeyFrames, menuShowGraph);
             if (menuShowPoints)
-                mpMapDrawer->DrawMapPoints();
+                mpMapDrawer->DrawMapPoints();  // 绘制路标点
             if (menuShowLines)
-                mpMapDrawer->DrawMapLines();
+                mpMapDrawer->DrawMapLines();  // 绘制线
             if (menuShowPlanes)
-                mpMapDrawer->DrawMapPlanes();
-            if (menuShowSurfels)
-                mpMapDrawer->DrawSurfels();
+                mpMapDrawer->DrawMapPlanes();  // 绘制平面点
+//            if (menuShowSurfels)
+//                mpMapDrawer->DrawSurfels();
+            mpMapDrawer->DrawTruth_poses();
+
+            // 绘制原点坐标系
+            glLineWidth(5);
+            glBegin(GL_LINES);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glVertex3f(0, 0, 0);
+            glVertex3f(1, 0, 0);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 1, 0);
+            glColor3f(0.0f, 0.0f, 1.0f);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 0, 1);
+            glEnd();
 
             pangolin::FinishFrame();
 
+            // 绘制点、线在图片上
             cv::Mat im = mpFrameDrawer->DrawFrame();
             cv::imshow("ManhattanSLAM: Current Frame", im);
             cv::waitKey(mT);

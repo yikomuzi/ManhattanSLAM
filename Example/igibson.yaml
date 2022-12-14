@@ -5,10 +5,10 @@
 #--------------------------------------------------------------------------------------------
 
 # Camera calibration and distortion parameters (OpenCV)
-Camera.fx: 250.0
-Camera.fy: 250.0
-Camera.cx: 250.0
-Camera.cy: 250.0
+Camera.fx: 240.0
+Camera.fy: 240.0
+Camera.cx: 320.0
+Camera.cy: 240.0
 
 Camera.k1: 0.0
 Camera.k2: 0.0
@@ -16,8 +16,8 @@ Camera.p1: 0.0
 Camera.p2: 0.0
 Camera.k3: 0.0
 
-Camera.width: 500
-Camera.height: 500
+Camera.width: 640
+Camera.height: 480
 
 # Camera frames per second
 Camera.fps: 20.0
@@ -32,7 +32,7 @@ Camera.RGB: 1
 ThDepth: 40.0
 
 # Deptmap values factor
-DepthMapFactor: 12.75
+DepthMapFactor: 25.5
 
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
@@ -66,7 +66,7 @@ Viewer.CameraLineWidth: 3
 Viewer.ViewpointX: 0
 Viewer.ViewpointY: 4
 Viewer.ViewpointZ: 1
-Viewer.ViewpointF: 250
+Viewer.ViewpointF: 384
 
 Plane.AssociationDisRef: 0.05
 Plane.AssociationAngRef: 0.985 # 10 degree

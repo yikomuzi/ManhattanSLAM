@@ -46,18 +46,22 @@ namespace ORB_SLAM2 {
 
             // Check recent MapPoints
             // VI-B recent map points culling
-            thread threadCullPoint(&LocalMapping::MapPointCulling, this);
-            thread threadCullLine(&LocalMapping::MapLineCulling, this);
-            thread threadCullPlane(&LocalMapping::MapPlaneCulling, this);
-            threadCullPoint.join();
-            threadCullLine.join();
-            threadCullPlane.join();
+//            thread threadCullPoint(&LocalMapping::MapPointCulling, this);
+//            thread threadCullLine(&LocalMapping::MapLineCulling, this);
+//            thread threadCullPlane(&LocalMapping::MapPlaneCulling, this);
+//            threadCullPoint.join();
+//            threadCullLine.join();
+//            threadCullPlane.join();
+            this->MapPointCulling();
+            this->MapLineCulling();
+            this->MapPlaneCulling();
 
             // Triangulate new MapPoints
             // VI-C new map points creation
 
-            thread threadCreatePoints(&LocalMapping::CreateNewMapPoints, this);
-            threadCreatePoints.join();
+//            thread threadCreatePoints(&LocalMapping::CreateNewMapPoints, this);
+//            threadCreatePoints.join();
+            this->CreateNewMapPoints();
 
             if (!CheckNewKeyFrames()) {
                 // Find more matches in neighbor keyframes and fuse point duplications
